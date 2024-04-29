@@ -2,6 +2,7 @@ package com.amrithaS.reporting.controller;
 
 
 import com.amrithaS.reporting.dto.ReportsDTO;
+import com.amrithaS.reporting.exception.ReportingServiceException;
 import com.amrithaS.reporting.service.ReportsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class ReportsController {
         try {
             return new ResponseEntity<>(reportsService.getAllReports(), HttpStatus.OK);
         }
-        catch (Exception e) {
+        catch (ReportingServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -33,7 +34,7 @@ public class ReportsController {
         try {
             return new ResponseEntity<>(reportsService.getReportById(reportId), HttpStatus.OK);
         }
-        catch (Exception e) {
+        catch (ReportingServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -43,7 +44,7 @@ public class ReportsController {
         try {
             return new ResponseEntity<>(reportsService.addReport(reportsDTO), HttpStatus.OK);
         }
-        catch (Exception e) {
+        catch (ReportingServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
@@ -53,7 +54,17 @@ public class ReportsController {
         try {
             return new ResponseEntity<>(reportsService.updateReport(reportsDTO), HttpStatus.OK);
         }
-        catch (Exception e){
+        catch (ReportingServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/deleteReportById/{id}")
+    public ResponseEntity<String> deleteReportById(@PathVariable Integer id) {
+        try {
+            return new ResponseEntity<>(reportsService.deleteReport(id), HttpStatus.OK);
+        }
+        catch ( ReportingServiceException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

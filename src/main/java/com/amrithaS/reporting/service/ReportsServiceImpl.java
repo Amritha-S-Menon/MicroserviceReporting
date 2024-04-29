@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -20,7 +21,7 @@ public class ReportsServiceImpl implements ReportsService {
     @Override
     public List<ReportsDTO> getAllReports() {
         List<ReportsDTO> reports = new ArrayList<>();
-        List<Reports> eReports = reportsDAO.findAll();
+        List<Reports> eReports = reportsDAO.findAllReports();
         for(Reports eReport : eReports) {
             ReportsDTO reportsDTO = new ReportsDTO();
             reportsDTO.setReportId(eReport.getReportId());
@@ -47,12 +48,14 @@ public class ReportsServiceImpl implements ReportsService {
     @Override
     public String updateReport(ReportsDTO reportsDTO) {
         //ReportsDTO returnedReport = new ReportsDTO();
-        Reports aReport = reportsDAO.getReferenceById(reportsDTO.getReportId());
+        System.out.println("Entry");
+        Reports aReport = reportsDAO.findReportById(reportsDTO.getReportId());
+        System.out.println("agjk");
        // returnedReport.setReportId(aReport.getReportId());
         aReport.setName(reportsDTO.getName());
         aReport.setDescription(reportsDTO.getDescription());
         aReport.setLocation(reportsDTO.getLocation());
-        reportsDAO.saveAndFlush(aReport);
+        System.out.println("Exit1");
         return "Report updated successfully";
     }
 
@@ -67,9 +70,9 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     @Override
-    public void deleteReport(int id) {
-//      Reports aReport = reportsDAO.getReferenceById(getReportById(id).getReportId());
-      
+    public String deleteReport(int id) {
+      reportsDAO.deleteById(id);
+       return "Report deleted successfully";
     }
 
 
